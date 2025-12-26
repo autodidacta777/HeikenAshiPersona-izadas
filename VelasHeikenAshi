@@ -1,0 +1,19 @@
+//@version=5
+indicator("Heiken Ashi Personalizado", overlay=true)
+
+// --- Heiken Ashi ---
+haClose = (open + high + low + close) / 4
+
+var float haOpen = na
+haOpen := na(haOpen[1]) ? (open + close) / 2 : (haOpen[1] + haClose[1]) / 2
+
+haHigh = math.max(high, math.max(haOpen, haClose))
+haLow  = math.min(low,  math.min(haOpen, haClose))
+
+// --- Colores ---
+bull = color.lime
+bear = color.red
+cCol = haClose >= haOpen ? bull : bear
+
+// --- Plot (UNA sola línea para evitar errores) ---
+plotcandle(haOpen, haHigh, haLow, haClose, color=cCol, wickcolor=cCol, bordercolor=cCol)
